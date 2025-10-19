@@ -8,6 +8,7 @@
 #include "vga_utils.h"
 #include "unit_converter.h"
 #include "screensaver.h" 
+#include "file_manager.h" 
 
 // Simple string length function
 int kstrlen(const char* str) {
@@ -58,6 +59,9 @@ void run_command(const char* cmd) {
     }
     else if (strcmp(cmd, "matrix") == 0) {
         matrix_screensaver();
+    }
+    else if (strcmp(cmd, "files") == 0) {
+        file_manager_command();
     } 
     else if (strcmp(cmd, "calc") == 0) {
         calc_command();

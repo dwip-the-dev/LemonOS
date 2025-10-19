@@ -5,8 +5,8 @@ CC = gcc
 CFLAGS = -nostdlib -nostdinc -fno-builtin -fno-stack-protector -O2 -Wall -Wextra -m32 -Iinclude -Wno-array-bounds
 
 OBJS = boot.o kernel.o vga.o keyboard.o shell.o commands.o \
-       apps/calculator.o apps/clock.o apps/system_info.o apps/unit_converter.o apps/screensaver.o \
-       drivers/rtc.o drivers/vga_utils.o
+       apps/calculator.o apps/clock.o apps/system_info.o apps/unit_converter.o apps/screensaver.o apps/file_manager.o \
+       drivers/rtc.o drivers/vga_utils.o drivers/simple_fs.o
 
 # Default target
 all: lemon.bin
@@ -49,7 +49,10 @@ apps/system_info.o: apps/system_info.c include/system_info.h include/vga.h inclu
 	
 apps/screensaver.o: apps/screensaver.c include/screensaver.h include/vga.h include/keyboard.h
 	$(CC) $(CFLAGS) -c apps/screensaver.c -o apps/screensaver.o
-
+	
+apps/file_manager.o: apps/file_manager.c include/file_manager.h include/vga.h include/keyboard.h include/filesystem.h include/vga_utils.h
+	$(CC) $(CFLAGS) -c apps/file_manager.c -o apps/file_manager.o
+	
 # Driver objects
 drivers/rtc.o: drivers/rtc.c include/rtc.h
 	$(CC) $(CFLAGS) -c drivers/rtc.c -o drivers/rtc.o
@@ -57,6 +60,12 @@ drivers/rtc.o: drivers/rtc.c include/rtc.h
 drivers/vga_utils.o: drivers/vga_utils.c include/vga_utils.h include/vga.h
 	$(CC) $(CFLAGS) -c drivers/vga_utils.c -o drivers/vga_utils.o
 
+drivers/filesystem.o: drivers/filesystem.c include/filesystem.h include/vga.h include/keyboard.h include/vga_utils.h
+	$(CC) $(CFLAGS) -c drivers/filesystem.c -o drivers/filesystem.o
+
+drivers/simple_fs.o: drivers/simple_fs.c include/filesystem.h include/vga.h
+	$(CC) $(CFLAGS) -c drivers/simple_fs.c -o drivers/simple_fs.o
+	
 # Clean
 clean:
 	rm -f *.o *.bin lemon.iso
