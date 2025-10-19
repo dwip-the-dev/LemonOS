@@ -160,7 +160,7 @@ Found a bug? Want a new feature? Contributions are welcome!
 5. Open a Pull Request
 
 ### Ideas for Contribution
-- [ ] File system support
+- [✅] File system support
 - [ ] Simple text editor
 - [ ] Basic games (Snake, Pong)
 - [ ] Network stack
