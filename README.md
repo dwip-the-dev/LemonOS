@@ -162,6 +162,7 @@ Found a bug? Want a new feature? Contributions are welcome!
 ### Ideas for Contribution
 - [x] File system support
 - [x] Simple text editor
+- [ ] Colour themed OS
 - [ ] Basic games (Snake, Pong)
 - [ ] Network stack
 - [ ] More Apps
