@@ -37,7 +37,7 @@ A feature-packed, from-scratch 32-bit x86 operating system written in C and Asse
 
 
 ```
-🍋 LemonOS v0.1 - Baremetal OS by YourName
+🍋 LemonOS v0.1 - Baremetal OS by dwip-the-dev
 
 LemonOS> help
 Commands: help, clear, about, calc, clock, info, convert, matrix
