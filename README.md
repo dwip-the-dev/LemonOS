@@ -111,6 +111,7 @@ LemonOS
 ├── apps
 │   ├── calculator.c
 │   ├── clock.c
+│   ├── file_manager.c
 │   ├── screensaver.c
 │   ├── system_info.c
 │   └── unit_converter.c
@@ -120,11 +121,14 @@ LemonOS
 ├── commands.h
 ├── drivers
 │   ├── rtc.c
+│   ├── simple_fs.c
 │   └── vga_utils.c
 ├── grub.cfg
 ├── include
 │   ├── calculator.h
 │   ├── clock.h
+│   ├── file_manager.h
+│   ├── filesystem.h
 │   ├── keyboard.h
 │   ├── rtc.h
 │   ├── screensaver.h
@@ -138,12 +142,11 @@ LemonOS
 ├── keyboard.c
 ├── linker.ld
 ├── Makefile
-├── README.md
 ├── shell.c
 ├── shell.h
 └── vga.c
 
-4 directories, 31 files
+4 directories, 34 files
 ```
 
 ## 🤝 Contributing
