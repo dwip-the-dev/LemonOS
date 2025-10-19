@@ -50,27 +50,6 @@ Commands: help, clear, about, calc, clock, info, convert, matrix
   convert - Unit converter
   matrix  - Start Matrix screen saver manually
 
-
-## 🛠️ Technical Architecture
-
-```
-LemonOS/
-├── 🏗️  Kernel Layer
-│   ├── Bootloader (boot.s)
-│   ├── Kernel Entry (kernel.c)
-│   └── System Initialization
-├── 🚗 Driver Layer  
-│   ├── VGA Text Driver (vga.c)
-│   ├── PS/2 Keyboard (keyboard.c)
-│   ├── RTC Driver (rtc.c)
-│   └── VGA Utilities (vga_utils.c)
-├── 🎯 Application Layer
-│   ├── Shell Interface (shell.c)
-│   ├── Command Handler (commands.c)
-│   └── Built-in Apps (apps/)
-└── 🔧 Build System
-    ├── Makefile
-    └── Linker Script (linker.ld)
 ```
 
 ## 🚀 Quick Start
