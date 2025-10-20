@@ -57,7 +57,7 @@ void run_command(const char* cmd) {
         for (int i = 0; logo[i] != 0; i++) {
             vga_println(logo[i]);
         }
-        vga_println("LemonOS v1.0 - Baremetal OS by Dwip");
+        vga_println("LemonOS v3.0 - Baremetal OS by Dwip");
     }
     else if (strcmp(cmd, "convert") == 0) {
         unit_converter_command();
