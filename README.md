@@ -211,6 +211,7 @@ This project is excellent for learning:
 - **James Molloy's OS Tutorial** - Foundational knowledge
 - **Multiboot Specification** - Boot standard
 - **All open-source OS projects** - Inspiration and reference
+- **AI for providing the comments in the code (because mostly i lose track and am lazy 🙄**
 
 ## 📄 License
 
