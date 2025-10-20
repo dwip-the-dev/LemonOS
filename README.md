@@ -29,6 +29,8 @@ A feature-packed, from-scratch 32-bit x86 operating system written in C and Asse
 | 🌧️ **Matrix Screensaver** | Matrix Effect | 🚀 |
 | 💻 **Interactive Shell** | Command-line interface with tab completion | ✅ |
 
+**There are more apps and games go use LemonOS and check it out ✌️**
+
 ### 🎨 Visual Flair
 - **ASCII Art Boot Screen** - Beautiful lemon-themed artwork
 - **Matrix Screensaver** - Activates after 60 seconds of inactivity
