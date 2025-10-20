@@ -44,21 +44,23 @@ double string_to_double(const char* str) {
     return result * sign;
 }
 
-// Simple double to string conversion for printing
+// Simple double to string conversion for printing with colors
 void print_double(double num) {
     // Handle negative numbers
     if (num < 0) {
-        vga_putchar('-');
+        vga_putchar_color('-', VGA_COLOR_RED, VGA_COLOR_BLACK);
         num = -num;
+    } else {
+        vga_putchar_color('+', VGA_COLOR_GREEN, VGA_COLOR_BLACK);
     }
     
     // Extract integer and fractional parts
     int int_part = (int)num;
     double frac_part = num - int_part;
     
-    // Print integer part
+    // Print integer part in cyan
     if (int_part == 0) {
-        vga_putchar('0');
+        vga_putchar_color('0', VGA_COLOR_CYAN, VGA_COLOR_BLACK);
     } else {
         char int_buffer[16];
         int i = 0;
@@ -69,31 +71,31 @@ void print_double(double num) {
         }
         
         while (i > 0) {
-            vga_putchar(int_buffer[--i]);
+            vga_putchar_color(int_buffer[--i], VGA_COLOR_CYAN, VGA_COLOR_BLACK);
         }
     }
     
-    // Print decimal point
-    vga_putchar('.');
+    // Print decimal point in white
+    vga_putchar_color('.', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     
-    // Print fractional part (2 decimal places)
+    // Print fractional part (2 decimal places) in light blue
     frac_part *= 100;
     int frac_int = (int)(frac_part + 0.5);
     
     if (frac_int > 99) frac_int = 99;
     
     if (frac_int < 10) {
-        vga_putchar('0');
-        vga_putchar('0' + frac_int);
+        vga_putchar_color('0', VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
+        vga_putchar_color('0' + frac_int, VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
     } else {
-        vga_putchar('0' + (frac_int / 10));
-        vga_putchar('0' + (frac_int % 10));
+        vga_putchar_color('0' + (frac_int / 10), VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
+        vga_putchar_color('0' + (frac_int % 10), VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
     }
 }
 
-// Get a single character input
+// Get a single character input with colors
 char get_char_input(void) {
-    vga_print("> ");
+    vga_print_color("> ", VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
     
     while(1) {
         poll_keyboard();
@@ -102,7 +104,7 @@ char get_char_input(void) {
             char c = getchar();
             
             if (c == '+' || c == '-' || c == '*' || c == '/') {
-                vga_putchar(c);
+                vga_putchar_color(c, VGA_COLOR_YELLOW, VGA_COLOR_BLACK);
                 vga_println("");
                 return c;
             }
@@ -111,30 +113,30 @@ char get_char_input(void) {
             }
             else if (c == '\n') {
                 vga_println("");
-                vga_print("Error: Please enter an operator (+, -, *, /)");
+                vga_print_color("Error: Please enter an operator (+, -, *, /)", VGA_COLOR_RED, VGA_COLOR_BLACK);
                 vga_println("");
-                vga_print("> ");
+                vga_print_color("> ", VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
                 continue;
             }
             else {
-                vga_putchar(c);
-                vga_print(" - Invalid operator! Use +, -, *, or /");
+                vga_putchar_color(c, VGA_COLOR_RED, VGA_COLOR_BLACK);
+                vga_print_color(" - Invalid operator! Use +, -, *, or /", VGA_COLOR_RED, VGA_COLOR_BLACK);
                 vga_println("");
-                vga_print("> ");
+                vga_print_color("> ", VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
                 continue;
             }
         }
     }
 }
 
-// Get a double value from user input
+// Get a double value from user input with colors
 double get_double_input(void) {
     char buffer[32];
     int pos = 0;
     int decimal_points = 0;
     int has_digits = 0;
     
-    vga_print("> ");
+    vga_print_color("> ", VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
     
     while(1) {
         poll_keyboard();
@@ -144,8 +146,8 @@ double get_double_input(void) {
             
             if (c == '\n') {
                 if (pos == 0 || !has_digits) {
-                    vga_println("Error: Please enter a valid number");
-                    vga_print("> ");
+                    vga_println_color("Error: Please enter a valid number", VGA_COLOR_RED, VGA_COLOR_BLACK);
+                    vga_print_color("> ", VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
                     pos = 0;
                     decimal_points = 0;
                     has_digits = 0;
@@ -167,79 +169,113 @@ double get_double_input(void) {
             else if (c >= '0' && c <= '9') {
                 if (pos < 31) {
                     buffer[pos++] = c;
-                    vga_putchar(c);
+                    vga_putchar_color(c, VGA_COLOR_CYAN, VGA_COLOR_BLACK);
                     has_digits = 1;
                 }
             }
             else if (c == '.' && decimal_points == 0) {
                 if (pos < 31) {
                     buffer[pos++] = c;
-                    vga_putchar(c);
+                    vga_putchar_color(c, VGA_COLOR_WHITE, VGA_COLOR_BLACK);
                     decimal_points = 1;
                 }
             }
             else if (c == '-' && pos == 0) {
                 buffer[pos++] = c;
-                vga_putchar(c);
+                vga_putchar_color(c, VGA_COLOR_RED, VGA_COLOR_BLACK);
+            }
+            else {
+                // Invalid character - show error but don't add to buffer
+                vga_putchar_color(c, VGA_COLOR_RED, VGA_COLOR_BLACK);
+                vga_backspace(); // Remove the invalid character
+                vga_print_color("?", VGA_COLOR_RED, VGA_COLOR_BLACK);
+                vga_backspace(); // Remove the question mark
             }
         }
     }
 }
 
-// Calculator command implementation
+// Print operator with appropriate color
+void print_operator(char op) {
+    switch(op) {
+        case '+':
+            vga_putchar_color('+', VGA_COLOR_GREEN, VGA_COLOR_BLACK);
+            break;
+        case '-':
+            vga_putchar_color('-', VGA_COLOR_YELLOW, VGA_COLOR_BLACK);
+            break;
+        case '*':
+            vga_putchar_color('*', VGA_COLOR_CYAN, VGA_COLOR_BLACK);
+            break;
+        case '/':
+            vga_putchar_color('/', VGA_COLOR_MAGENTA, VGA_COLOR_BLACK);
+            break;
+        default:
+            vga_putchar_color(op, VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    }
+}
+
+// Calculator command implementation with colors
 void calc_command(void) {
     char op;
     double a, b, res;
     
-    vga_println("=== LemonOS Calculator ===");
-    vga_println("Available operators: +, -, *, /");
+    vga_clear();
+    vga_println_color("=== LemonOS Calculator ===", VGA_COLOR_YELLOW, VGA_COLOR_BLACK);
+    vga_println_color("Available operators: +, -, *, /", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     vga_println("");
     
+    vga_print_color("Select operator ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    vga_print_color("(+, -, *, /)", VGA_COLOR_YELLOW, VGA_COLOR_BLACK);
+    vga_println_color(":", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     op = get_char_input();
     
-    vga_print("Enter first number: ");
+    vga_print_color("Enter first number: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     a = get_double_input();
     
-    vga_print("Enter second number: ");
+    vga_print_color("Enter second number: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     b = get_double_input();
     
     vga_println("");
-    vga_print("Calculating: ");
+    vga_print_color("Calculating: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     print_double(a);
-    vga_putchar(' ');
-    vga_putchar(op);
-    vga_putchar(' ');
+    vga_putchar_color(' ', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    print_operator(op);
+    vga_putchar_color(' ', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     print_double(b);
     vga_println("");
     
+    vga_print_color("Result: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    
     if (op == '+') {
         res = a + b;
-        vga_print("Result: ");
         print_double(res);
         vga_println("");
     } 
     else if (op == '-') {
         res = a - b;
-        vga_print("Result: ");
         print_double(res);
         vga_println("");
     } 
     else if (op == '*') {
         res = a * b;
-        vga_print("Result: ");
         print_double(res);
         vga_println("");
     } 
     else if (op == '/') {
         if (b != 0.0) {
             res = a / b;
-            vga_print("Result: ");
             print_double(res);
             vga_println("");
         } else {
-            vga_println("Error: Division by zero!");
+            vga_println_color("Error: Division by zero!", VGA_COLOR_RED, VGA_COLOR_BLACK);
         }
     }
     
-    vga_println("=== Calculation Complete ===");
+    vga_println("");
+    vga_println_color("=== Calculation Complete ===", VGA_COLOR_GREEN, VGA_COLOR_BLACK);
+    vga_println("");
+    
+    // Reset to default colors
+    vga_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 }

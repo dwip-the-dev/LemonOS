@@ -9,6 +9,13 @@
 #include "unit_converter.h"
 #include "screensaver.h" 
 #include "file_manager.h" 
+#include "text_graphics.h"
+#include "snake.h"
+#include "shutdown.h"
+#include "reboot.h" 
+#include "gui.h"
+#include "color_demo.h"
+#include "breakout.h"
 
 // Simple string length function
 int kstrlen(const char* str) {
@@ -17,13 +24,13 @@ int kstrlen(const char* str) {
     return len;
 }
 
-// using strcmp
-int strcmp(const char* a, const char* b) {
-    while (*a && (*a == *b)) {
-        a++;
-        b++;
-    }
-    return *(const unsigned char*)a - *(const unsigned char*)b;
+// FIXED: Make strcmp static to avoid conflict with drivers/string.c
+static int strcmp(const char* a, const char* b) {
+   while (*a && (*a == *b)) {
+       a++;
+       b++;
+   }
+   return *(const unsigned char*)a - *(const unsigned char*)b;
 }
 
 void run_command(const char* cmd) {
@@ -42,8 +49,6 @@ void run_command(const char* cmd) {
         vga_println("  about - Show system information");
         vga_println("  calc  - Simple calculator");
         vga_println("  clock - Real-time clock with RTC");
-        vga_println("  info  - Detailed system information");
-        vga_println("  convert - Unit converter");
     } 
     else if (strcmp(cmd, "clear") == 0) {
         vga_clear();
@@ -60,9 +65,12 @@ void run_command(const char* cmd) {
     else if (strcmp(cmd, "matrix") == 0) {
         matrix_screensaver();
     }
+    else if (strcmp(cmd, "snake") == 0) {
+           snake_game();
+    }
     else if (strcmp(cmd, "files") == 0) {
         file_manager_command();
-    } 
+    }
     else if (strcmp(cmd, "calc") == 0) {
         calc_command();
     }
@@ -71,6 +79,21 @@ void run_command(const char* cmd) {
     }
     else if (strcmp(cmd, "info") == 0) {
         system_info_command();
+    }
+    else if (strcmp(cmd, "shutdown") == 0) {
+        shutdown();
+    }
+    else if (strcmp(cmd, "reboot") == 0) {
+        reboot();
+    }
+    else if (strcmp(cmd, "gui") == 0) {
+        gui_demo();
+    }
+    else if (strcmp(cmd, "colors") == 0) {
+        color_demo();
+    }
+    else if (strcmp(cmd, "breakout") == 0) {
+        breakout_game();
     }
     else {
         vga_print("Unknown command: ");

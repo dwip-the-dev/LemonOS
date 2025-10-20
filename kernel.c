@@ -4,6 +4,7 @@
 #include "keyboard.h"
 #include "shell.h"
 
+
 void kernel_main(void) {
     // Clear sceen and boot banner
     vga_clear();

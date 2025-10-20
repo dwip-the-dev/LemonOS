@@ -141,6 +141,40 @@ uint8_t get_display_mode(void) {
     return *mode;
 }
 
+// Helper function to print colored value
+static void print_colored_value(const char* label, const char* value, uint8_t label_color, uint8_t value_color) {
+    vga_print_color("  ", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_print_color(label, label_color, VGA_COLOR_BLACK);
+    vga_print_color(": ", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_print_color(value, value_color, VGA_COLOR_BLACK);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+}
+
+// Helper function to print colored numeric value
+static void print_colored_number(const char* label, int value, uint8_t label_color, uint8_t value_color) {
+    vga_print_color("  ", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_print_color(label, label_color, VGA_COLOR_BLACK);
+    vga_print_color(": ", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Manual number printing with color
+    if (value == 0) {
+        vga_putchar_color('0', value_color, VGA_COLOR_BLACK);
+    } else {
+        char temp[20];
+        int temp_pos = 0;
+        int num = value;
+        
+        while (num > 0) {
+            temp[temp_pos++] = '0' + (num % 10);
+            num /= 10;
+        }
+        while (temp_pos > 0) {
+            vga_putchar_color(temp[--temp_pos], value_color, VGA_COLOR_BLACK);
+        }
+    }
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+}
+
 // System info command
 void system_info_command(void) {
     char cpu_vendor[13];
@@ -163,76 +197,155 @@ void system_info_command(void) {
     get_rtc_time(&hours, &minutes, &seconds);
     get_rtc_date(&day, &month, &year);
     
-    vga_println("=== LemonOS System Information ===");
-    vga_println("");
+    vga_clear();
+    
+    // Header
+    vga_println_color("=== LemonOS System Information ===", VGA_COLOR_YELLOW, VGA_COLOR_BLACK);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     
     // OS Information
-    vga_println("OS Information:");
-    vga_println("  Name: LemonOS");
-    vga_println("  Version: 0.1");
-    vga_println("  Developer: Dwip");
-    vga_println("  Architecture: 32-bit x86");
-    vga_println("");
+    vga_println_color("OS Information:", VGA_COLOR_CYAN, VGA_COLOR_BLACK);
+    print_colored_value("Name", "LemonOS", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
+    print_colored_value("Version", "0.1", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
+    print_colored_value("Developer", "Dwip", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
+    print_colored_value("Architecture", "32-bit x86", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     
     // CPU Information
-    vga_println("CPU Information:");
-    vga_print("  Vendor: ");
-    vga_println(cpu_vendor);
-    vga_print("  Brand: ");
-    vga_println(cpu_brand);
-    vga_println("");
+    vga_println_color("CPU Information:", VGA_COLOR_CYAN, VGA_COLOR_BLACK);
+    print_colored_value("Vendor", cpu_vendor, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_BLUE);
+    print_colored_value("Brand", cpu_brand, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_BLUE);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     
     // Memory Information
-    vga_println("Memory Information:");
-    vga_print("  Conventional: ");
-    vga_print_int(conv_memory);
-    vga_println(" KB");
-    vga_print("  Extended: ");
-    vga_print_int(ext_memory);
-    vga_println(" KB");
-    vga_print("  Total: ");
-    vga_print_int(conv_memory + ext_memory);
-    vga_println(" KB");
-    vga_println("");
+    vga_println_color("Memory Information:", VGA_COLOR_CYAN, VGA_COLOR_BLACK);
+    
+    // Conventional memory
+    vga_print_color("  Conventional: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK); // Reset color
+    // Print number manually with color
+    if (conv_memory == 0) {
+        vga_putchar_color('0', VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+    } else {
+        char temp[20];
+        int temp_pos = 0;
+        unsigned int num = conv_memory;
+        
+        while (num > 0) {
+            temp[temp_pos++] = '0' + (num % 10);
+            num /= 10;
+        }
+        while (temp_pos > 0) {
+            vga_putchar_color(temp[--temp_pos], VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+        }
+    }
+    vga_println_color(" KB", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Extended memory
+    vga_print_color("  Extended: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    if (ext_memory == 0) {
+        vga_putchar_color('0', VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+    } else {
+        char temp[20];
+        int temp_pos = 0;
+        unsigned int num = ext_memory;
+        
+        while (num > 0) {
+            temp[temp_pos++] = '0' + (num % 10);
+            num /= 10;
+        }
+        while (temp_pos > 0) {
+            vga_putchar_color(temp[--temp_pos], VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+        }
+    }
+    vga_println_color(" KB", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Total memory
+    vga_print_color("  Total: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    unsigned int total_memory = conv_memory + ext_memory;
+    if (total_memory == 0) {
+        vga_putchar_color('0', VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+    } else {
+        char temp[20];
+        int temp_pos = 0;
+        unsigned int num = total_memory;
+        
+        while (num > 0) {
+            temp[temp_pos++] = '0' + (num % 10);
+            num /= 10;
+        }
+        while (temp_pos > 0) {
+            vga_putchar_color(temp[--temp_pos], VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+        }
+    }
+    vga_println_color(" KB", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     
     // Hardware Information
-    vga_println("Hardware Information:");
-    vga_print("  Display: ");
-    vga_println(display_type);
-    vga_print("  Display Mode: 0x");
-    vga_print_hex(display_mode);
-    vga_println("");
-    vga_print("  Floppy Drives: ");
-    vga_print_int(floppy_drives);
-    vga_println("");
-    vga_print("  Serial Ports: ");
-    vga_print_int(serial_ports);
-    vga_println("");
-    vga_println("");
+    vga_println_color("Hardware Information:", VGA_COLOR_CYAN, VGA_COLOR_BLACK);
+    print_colored_value("Display", display_type, VGA_COLOR_LIGHT_GREY, VGA_COLOR_MAGENTA);
+    
+    // Display mode with hex
+    vga_print_color("  Display Mode: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    vga_print_color("0x", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Print hex manually with color
+    uint8_t mode = display_mode;
+    char hex_chars[] = "0123456789ABCDEF";
+    vga_putchar_color(hex_chars[(mode >> 4) & 0x0F], VGA_COLOR_MAGENTA, VGA_COLOR_BLACK);
+    vga_putchar_color(hex_chars[mode & 0x0F], VGA_COLOR_MAGENTA, VGA_COLOR_BLACK);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    print_colored_number("Floppy Drives", floppy_drives, VGA_COLOR_LIGHT_GREY, VGA_COLOR_MAGENTA);
+    print_colored_number("Serial Ports", serial_ports, VGA_COLOR_LIGHT_GREY, VGA_COLOR_MAGENTA);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     
     // Time Information
-    vga_println("Time Information:");
-    vga_print("  Date: ");
-    vga_print_int(day);
-    vga_putchar('/');
-    vga_print_int(month);
-    vga_putchar('/');
-    vga_print_int(year);
-    vga_println("");
+    vga_println_color("Time Information:", VGA_COLOR_CYAN, VGA_COLOR_BLACK);
     
-    vga_print("  Time: ");
-    if (hours < 10) vga_putchar('0');
-    vga_print_int(hours);
-    vga_putchar(':');
-    if (minutes < 10) vga_putchar('0');
-    vga_print_int(minutes);
-    vga_putchar(':');
-    if (seconds < 10) vga_putchar('0');
-    vga_print_int(seconds);
-    vga_println("");
-    vga_println("");
+    // Date
+    vga_print_color("  Date: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     
-    vga_println("Press any key to continue...");
+    // Print day
+    if (day < 10) vga_putchar_color('0', VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
+    print_colored_number("", day, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK); // Reset for separator
+    vga_putchar_color('/', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Print month
+    if (month < 10) vga_putchar_color('0', VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
+    print_colored_number("", month, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_putchar_color('/', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Print year
+    print_colored_number("", year, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Time
+    vga_print_color("  Time: ", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    
+    // Print hours
+    if (hours < 10) vga_putchar_color('0', VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
+    print_colored_number("", hours, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_putchar_color(':', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Print minutes
+    if (minutes < 10) vga_putchar_color('0', VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
+    print_colored_number("", minutes, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED);
+    vga_print_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_putchar_color(':', VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    // Print seconds
+    if (seconds < 10) vga_putchar_color('0', VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
+    print_colored_number("", seconds, VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
+    vga_println_color("Press any key to continue...", VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     
     // Wait for key press
     while(1) {
@@ -242,4 +355,7 @@ void system_info_command(void) {
             break;
         }
     }
+    
+    // Reset to default colors
+    vga_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 }
