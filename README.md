@@ -192,6 +192,10 @@ Found a bug? Want a new feature? Contributions are welcome!
 - [ ] Run DOOM
 - [ ] Sound driver
 
+## ⚠️Known Bugs
+
+- **The breakout game due to earasing the game screen and reprinting again has some crazy amount of flickers and mostly uplayable. Looking forward for a solution soon.**
+
 ## 📚 Learning Resources
 
 This project is excellent for learning:
