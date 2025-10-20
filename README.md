@@ -111,6 +111,7 @@ LemonOS
 ├── apps
 │   ├── calculator.c
 │   ├── clock.c
+│   ├── color_demo.c
 │   ├── file_manager.c
 │   ├── screensaver.c
 │   ├── system_info.c
@@ -120,21 +121,42 @@ LemonOS
 ├── commands.c
 ├── commands.h
 ├── drivers
+│   ├── gui.c
+│   ├── reboot.c
 │   ├── rtc.c
+│   ├── shutdown.c
 │   ├── simple_fs.c
+│   ├── stdio.c
+│   ├── stdlib.c
+│   ├── string.c
+│   ├── text_graphics.c
 │   └── vga_utils.c
+├── games
+│   ├── breakout.c
+│   └── snake.c
 ├── grub.cfg
 ├── include
+│   ├── breakout.h
 │   ├── calculator.h
 │   ├── clock.h
+│   ├── color_demo.h
+│   ├── doom_real.h
 │   ├── file_manager.h
 │   ├── filesystem.h
+│   ├── gui.h
 │   ├── keyboard.h
+│   ├── reboot.h
 │   ├── rtc.h
 │   ├── screensaver.h
+│   ├── shutdown.h
+│   ├── snake.h
 │   ├── stddef.h
 │   ├── stdint.h
+│   ├── stdio.h
+│   ├── stdlib.h
+│   ├── string.h
 │   ├── system_info.h
+│   ├── text_graphics.h
 │   ├── unit_converter.h
 │   ├── vga.h
 │   └── vga_utils.h
@@ -146,7 +168,8 @@ LemonOS
 ├── shell.h
 └── vga.c
 
-4 directories, 34 files
+5 directories, 55 files
+
 ```
 
 ## 🤝 Contributing
@@ -162,8 +185,8 @@ Found a bug? Want a new feature? Contributions are welcome!
 ### Ideas for Contribution
 - [x] File system support
 - [x] Simple text editor
-- [ ] Colour themed OS
-- [ ] Basic games (Snake, Pong)
+- [x] Colour themed OS
+- [x] Basic games (Snake, pong)
 - [ ] Network stack
 - [ ] More Apps
 - [ ] Run DOOM
