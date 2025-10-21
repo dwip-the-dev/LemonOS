@@ -135,6 +135,7 @@ LemonOS
 │   └── vga_utils.c
 ├── games
 │   ├── breakout.c
+│   ├── pong.c
 │   └── snake.c
 ├── grub.cfg
 ├── include
@@ -142,11 +143,11 @@ LemonOS
 │   ├── calculator.h
 │   ├── clock.h
 │   ├── color_demo.h
-│   ├── doom_real.h
 │   ├── file_manager.h
 │   ├── filesystem.h
 │   ├── gui.h
 │   ├── keyboard.h
+│   ├── pong.h
 │   ├── reboot.h
 │   ├── rtc.h
 │   ├── screensaver.h
@@ -170,7 +171,8 @@ LemonOS
 ├── shell.h
 └── vga.c
 
-5 directories, 55 files
+5 directories, 56 files
+
 
 ```
 
