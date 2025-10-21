@@ -7,7 +7,7 @@
 #define GAME_WIDTH 80
 #define GAME_HEIGHT 24
 #define PADDLE_WIDTH 10
-#define BALL_SPEED 1
+#define BALL_SPEED 0.5
 #define BRICK_WIDTH 6
 #define BRICK_HEIGHT 1
 

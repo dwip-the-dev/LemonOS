@@ -76,7 +76,7 @@ void draw_game(void) {
 }
 
 void update_game(void) {
-    // Only move if we pressed a key this frame
+    // Only move if pressed a key this frame
     if (!moved_this_frame) {
         return;
     }

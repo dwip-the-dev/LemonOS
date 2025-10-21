@@ -103,10 +103,8 @@ unsigned int get_conventional_memory(void) {
     return *mem_kb; // Returns KB of conventional memory (0-640KB)
 }
 
-// Simple memory detection using BIOS INT 15h E820 (we'll simulate for now)
 unsigned int get_extended_memory(void) {
-    // In a real implementation, you'd use INT 15h, E820
-    // For now, we'll return a placeholder
+
     return 64 * 1024; // 64MB placeholder
 }
 

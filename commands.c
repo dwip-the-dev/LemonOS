@@ -16,6 +16,7 @@
 #include "gui.h"
 #include "color_demo.h"
 #include "breakout.h"
+#include "pong.h"
 
 // Simple string length function
 int kstrlen(const char* str) {
@@ -94,6 +95,9 @@ void run_command(const char* cmd) {
     }
     else if (strcmp(cmd, "breakout") == 0) {
         breakout_game();
+    }
+    else if (strcmp(cmd, "pong") == 0) {
+        pong_game();
     }
     else {
         vga_print("Unknown command: ");

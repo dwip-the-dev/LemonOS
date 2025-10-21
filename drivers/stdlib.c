@@ -16,8 +16,7 @@ void* malloc(size_t size) {
 }
 
 void free(void* ptr) {
-    // Simple implementation - we don't actually free memory
-    // In a real OS you'd want a proper memory manager
+    // Simple implementation - we don't actually free memory bruh
 }
 
 void* calloc(size_t num, size_t size) {

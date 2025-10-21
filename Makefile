@@ -4,12 +4,11 @@
 CC = gcc
 CFLAGS = -nostdlib -fno-builtin -fno-stack-protector -O2 -Wall -Wextra -m32 -Iinclude -Wno-array-bounds
 
-# FIXED: Added games/doom_real.o to OBJS
 OBJS = boot.o kernel.o vga.o keyboard.o shell.o commands.o \
        apps/calculator.o apps/clock.o apps/system_info.o apps/unit_converter.o apps/screensaver.o apps/file_manager.o apps/color_demo.o \
        drivers/rtc.o drivers/vga_utils.o drivers/simple_fs.o drivers/shutdown.o drivers/reboot.o drivers/gui.o \
        drivers/stdlib.o drivers/stdio.o drivers/string.o \
-       games/snake.o games/breakout.o
+       games/snake.o games/breakout.o games/pong.o
 
 # Default target
 all: lemon.bin
@@ -94,9 +93,11 @@ drivers/string.o: drivers/string.c include/string.h
 games/snake.o: games/snake.c include/snake.h include/text_graphics.h include/vga.h include/keyboard.h
 	$(CC) $(CFLAGS) -c games/snake.c -o games/snake.o
 	
-# FIXED: Corrected target name from snake.o to brick_breaker.o
 games/brick_breaker.o: games/breakout.c include/breakout.h include/text_graphics.h include/vga.h include/keyboard.h
 	$(CC) $(CFLAGS) -c games/breakout.c -o games/breakout.o
+	
+games/pong.o: games/pong.c include/pong.h include/vga.h include/keyboard.h include/vga_utils.h
+	$(CC) $(CFLAGS) -c games/pong.c -o games/pong.o
 
 # Clean
 clean:
