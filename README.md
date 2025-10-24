@@ -1,4 +1,4 @@
-# 🍋 LemonOS
+# 🍋 LemonOS (Discontinued cuz im shitted by the amt of work)
 
 > *A zesty, baremetal operating system from scratch with a refreshing twist*
 
