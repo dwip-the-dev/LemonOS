@@ -3,6 +3,7 @@
 #include "keyboard.h"
 #include "rtc.h"
 #include "vga_utils.h"
+#include "pmm.h"
 
 // BIOS Data Area locations
 #define BDA_BASE 0x400
@@ -104,8 +105,17 @@ unsigned int get_conventional_memory(void) {
 }
 
 unsigned int get_extended_memory(void) {
-
-    return 64 * 1024; // 64MB placeholder
+    size_t total_kb = pmm_get_total_frames() * 4;
+    if (total_kb > 1024) {
+        return (unsigned int)(total_kb - 1024);
+    }
+    unsigned char low = 0, high = 0;
+    asm volatile("outb %0, %1" : : "a"((unsigned char)0x30), "Nd"((unsigned short)0x70));
+    asm volatile("inb %1, %0" : "=a"(low) : "Nd"((unsigned short)0x71));
+    asm volatile("outb %0, %1" : : "a"((unsigned char)0x31), "Nd"((unsigned short)0x70));
+    asm volatile("inb %1, %0" : "=a"(high) : "Nd"((unsigned short)0x71));
+    unsigned int cmos_kb = ((unsigned int)high << 8) | low;
+    return cmos_kb ? cmos_kb : (64 * 1024);
 }
 
 // Get equipment word from BIOS
@@ -204,7 +214,7 @@ void system_info_command(void) {
     // OS Information
     vga_println_color("OS Information:", VGA_COLOR_CYAN, VGA_COLOR_BLACK);
     print_colored_value("Name", "LemonOS", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
-    print_colored_value("Version", "0.1", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
+    print_colored_value("Version", "4.0", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
     print_colored_value("Developer", "Dwip", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
     print_colored_value("Architecture", "32-bit x86", VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN);
     vga_println_color("", VGA_COLOR_WHITE, VGA_COLOR_BLACK);

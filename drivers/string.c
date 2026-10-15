@@ -1,4 +1,5 @@
 #include "string.h"
+#include "stdlib.h"
 
 void* memset(void* ptr, int value, size_t num) {
     unsigned char* p = (unsigned char*)ptr;
@@ -101,4 +102,103 @@ char* strcat(char* destination, const char* source) {
     while (*source) *dst++ = *source++;
     *dst = '\0';
     return destination;
+}
+
+char* strncat(char* destination, const char* source, size_t num) {
+    char* dst = destination;
+    while (*dst) dst++;
+    size_t i = 0;
+    while (i < num && *source) {
+        *dst++ = *source++;
+        i++;
+    }
+    *dst = '\0';
+    return destination;
+}
+
+char* strchr(const char* str, int character) {
+    char c = (char)character;
+    while (*str) {
+        if (*str == c) return (char*)str;
+        str++;
+    }
+    if (c == '\0') return (char*)str;
+    return NULL;
+}
+
+char* strstr(const char* haystack, const char* needle) {
+    if (!haystack || !needle) return NULL;
+    if (*needle == '\0') return (char*)haystack;
+
+    for (; *haystack != '\0'; haystack++) {
+        if (*haystack == *needle) {
+            const char* h = haystack;
+            const char* n = needle;
+            while (*h != '\0' && *n != '\0' && *h == *n) {
+                h++;
+                n++;
+            }
+            if (*n == '\0') return (char*)haystack;
+        }
+    }
+    return NULL;
+}
+
+char* strrchr(const char* str, int character) {
+    char c = (char)character;
+    const char* last = NULL;
+    while (*str) {
+        if (*str == c) last = str;
+        str++;
+    }
+    if (c == '\0') return (char*)str;
+    return (char*)last;
+}
+
+char* strdup(const char* str) {
+    if (!str) return NULL;
+    size_t len = strlen(str);
+    char* copy = (char*)malloc(len + 1);
+    if (!copy) return NULL;
+    memcpy(copy, str, len + 1);
+    return copy;
+}
+
+char* strndup(const char* str, size_t n) {
+    if (!str) return NULL;
+    size_t len = 0;
+    while (len < n && str[len]) len++;
+    char* copy = (char*)malloc(len + 1);
+    if (!copy) return NULL;
+    memcpy(copy, str, len);
+    copy[len] = '\0';
+    return copy;
+}
+
+static inline char to_lower_char(char c) {
+    if (c >= 'A' && c <= 'Z') return c + ('a' - 'A');
+    return c;
+}
+
+int strcasecmp(const char* s1, const char* s2) {
+    while (*s1 && *s2) {
+        char c1 = to_lower_char(*s1);
+        char c2 = to_lower_char(*s2);
+        if (c1 != c2) return (unsigned char)c1 - (unsigned char)c2;
+        s1++;
+        s2++;
+    }
+    return (unsigned char)to_lower_char(*s1) - (unsigned char)to_lower_char(*s2);
+}
+
+int strncasecmp(const char* s1, const char* s2, size_t n) {
+    for (size_t i = 0; i < n; i++) {
+        if (!s1[i] || !s2[i]) {
+            return (unsigned char)to_lower_char(s1[i]) - (unsigned char)to_lower_char(s2[i]);
+        }
+        char c1 = to_lower_char(s1[i]);
+        char c2 = to_lower_char(s2[i]);
+        if (c1 != c2) return (unsigned char)c1 - (unsigned char)c2;
+    }
+    return 0;
 }

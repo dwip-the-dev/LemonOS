@@ -1,0 +1,36 @@
+# LemonOS .gitignore
+
+# Object and Binary Artifacts
+*.o
+*.bin
+*.elf
+*.iso
+*.so
+*.a
+iso/
+assets/doom1_wad.o
+libc/build/
+user/*.elf
+
+
+# Test Host Binaries
+tests/test_nist_gcm
+tests/test_tls
+tests/test_x25519
+
+# Log and Screen Dump Artifacts
+*.log
+*.ppm
+*.dump
+serial*.log
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -4,12 +4,13 @@
 #include "commands.h"
 #include "art.h"
 #include "screensaver.h"
+#include "auth.h"
 
 #define INPUT_BUFFER 128
 
-// Print prompt
+// Print prompt using auth system (dwip@lemonos:~$ or root@lemonos:~#)
 static void shell_prompt(void) {
-    vga_print("LemonOS> ");
+    vga_print(auth_get_prompt());
 }
 
 void shell_run(void) {

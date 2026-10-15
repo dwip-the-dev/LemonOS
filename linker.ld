@@ -3,6 +3,7 @@ ENTRY(_start)
 SECTIONS
 {
     . = 1M;
+    _kernel_start = .;
 
     .text :
     {
@@ -25,4 +26,7 @@ SECTIONS
         *(COMMON)
         *(.bss*)
     }
+
+    . = ALIGN(4096);
+    _kernel_end = .;
 }

@@ -25,7 +25,7 @@ static void wait_seconds(int seconds) {
 void shutdown(void) {
     vga_clear();
     vga_println("=== SYSTEM SHUTDOWN ===");
-    vga_println("Goodbye from LemonOS! 🍋");
+    vga_println("Goodbye from LemonOS!");
     vga_println("Shutting down in 5 seconds...");
     
     // Wait 1 second between each countdown

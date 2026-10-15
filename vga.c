@@ -14,10 +14,10 @@
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 
 // Current terminal state
-static size_t terminal_row;
-static size_t terminal_column;
-static uint8_t terminal_color;
-static uint16_t* terminal_buffer;
+static size_t terminal_row = 0;
+static size_t terminal_column = 0;
+static uint8_t terminal_color = 0x07;
+static uint16_t* terminal_buffer = (uint16_t*) 0xB8000;
 
 
 // Create VGA color entry
@@ -35,13 +35,17 @@ static inline void outb(uint16_t port, uint8_t value) {
     asm volatile ("outb %0, %1" : : "a"(value), "Nd"(port));
 }
 
+#include "serial.h"
+
 // Initialize terminal
 void vga_initialize(void) {
+    serial_println("  -> vga_init: setting fields");
     terminal_row = 0;
     terminal_column = 0;
     terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     terminal_buffer = VGA_MEMORY;
     
+    serial_println("  -> vga_init: clearing screen buffer");
     // Clear the screen
     for (size_t y = 0; y < VGA_HEIGHT; y++) {
         for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -50,8 +54,10 @@ void vga_initialize(void) {
         }
     }
     
+    serial_println("  -> vga_init: setting cursor");
     // Set cursor position
     vga_set_cursor(0, 0);
+    serial_println("  -> vga_init: done");
 }
 
 // Set cursor position
@@ -148,6 +154,7 @@ uint8_t vga_get_background(void) {
 
 // Put a character at current position
 void vga_putchar(char c) {
+    serial_putchar(c);
     // Handle newline
     if (c == '\n') {
         terminal_column = 0;
